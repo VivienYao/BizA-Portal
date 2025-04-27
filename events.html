@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events | BizAlum Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .events-container {
+            padding: 2rem 0;
+        }
+        
+        .events-filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-options select,
+        .search-events input {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .search-events {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .search-events input {
+            width: 100%;
+            padding-left: 2.5rem;
+        }
+        
+        .search-events i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .event-image {
+            height: 200px;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+        }
+        
+        .event-type {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: white;
+        }
+        
+        .type-networking {
+            background: #4d94ff;
+        }
+        
+        .type-workshop {
+            background: #ff7e5f;
+        }
+        
+        .type-conference {
+            background: #9b59b6;
+        }
+        
+        .type-social {
+            background: #2ecc71;
+        }
+        
+        .event-date {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .event-content {
+            padding: 1.5rem;
+        }
+        
+        .event-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .event-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .event-meta div {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .event-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .event-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .register-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .register-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .save-event {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .save-event:hover {
+            color: var(--primary-color);
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .featured-event {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .featured-image {
+            height: 100%;
+            min-height: 300px;
+            background-position: center;
+            background-size: cover;
+        }
+        
+        .featured-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .featured-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #222;
+        }
+        
+        .featured-tag {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        
+        .create-event-section {
+            margin-top: 4rem;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .create-event-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        
+        .create-event-text {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .create-event-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .create-event-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        @media (max-width: 768px) {
+            .featured-event {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-image {
+                min-height: 200px;
+            }
+            
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .create-event-section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">BizAlum Portal</a>
+                </div>
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="directory.html">Directory</a></li>
+                        <li><a href="events.html" class="active">Events</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                    </ul>
+                </nav>
+                <div class="header-right">
+                    <a href="profile.html" class="profile-link">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Profile" class="profile-img">
+                        <span>My Profile</span>
+                    </a>
+                    <button class="mobile-menu-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Alumni Events</h1>
+                <p>Connect, learn, and grow with fellow alumni through our exclusive events</p>
+            </div>
+        </section>
+
+        <section class="events-container container">
+            <div class="events-filter">
+                <div class="filter-options">
+                    <select name="event-type">
+                        <option value="">All Event Types</option>
+                        <option value="networking">Networking</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="conference">Conference</option>
+                        <option value="social">Social</option>
+                    </select>
+                    <select name="event-location">
+                        <option value="">All Locations</option>
+                        <option value="online">Online</option>
+                        <option value="in-person">In-Person</option>
+                    </select>
+                    <select name="event-date">
+                        <option value="">Any Date</option>
+                        <option value="this-week">This Week</option>
+                        <option value="this-month">This Month</option>
+                        <option value="next-month">Next Month</option>
+                    </select>
+                </div>
+                <div class="search-events">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search events...">
+                </div>
+            </div>
+
+            <div class="featured-event">
+                <div class="featured-image" style="background-image: url('https://images.unsplash.com/photo-1540317580384-e5d43867caa6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                <div class="featured-content">
+                    <span class="featured-tag">Featured Event</span>
+                    <h2 class="featured-title">Annual Alumni Business Conference 2023</h2>
+                    <div class="event-meta">
+                        <div>
+                            <i class="far fa-calendar-alt"></i>
+                            <span>October 15-17, 2023</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Grand Hyatt, New York</span>
+                        </div>
+                    </div>
+                    <p class="event-description">Join us for our flagship 3-day conference featuring keynote speakers from Fortune 500 companies, panel discussions, networking sessions, and workshops on the latest business trends and innovations.</p>
+                    <div class="event-actions">
+                        <a href="#" class="register-btn">Register Now</a>
+                        <div class="save-event">
+                            <i class="far fa-bookmark"></i>
+                            <span>Save Event</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1519750157634-b6d493a0f77c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                        <span class="event-type type-networking">Networking</span>
+                        <div class="event-date">Sep 20, 2023</div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Tech Industry Mixer</h3>
+                        <div class="event-meta">
+                            <div>
+                                <i class="far fa-clock"></i>
+                                <span>6:00 PM - 9:00 PM</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>San Francisco, CA</span>
+                            </div>
+                        </div>
+                        <p class="event-description">Connect with alumni working in various tech companies. Perfect opportunity to expand your professional network.</p>
+                        <div class="event-actions">
+                            <a href="#" class="register-btn">Register</a>
+                            <div class="save-event">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                        <span class="event-type type-workshop">Workshop</span>
+                        <div class="event-date">Oct 5, 2023</div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Financial Planning Workshop</h3>
+                        <div class="event-meta">
+                            <div>
+                                <i class="far fa-clock"></i>
+                                <span>2:00 PM - 4:30 PM</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Online (Zoom)</span>
+                            </div>
+                        </div>
+                        <p class="event-description">Learn essential financial planning strategies from expert alumni in the finance sector.</p>
+                        <div class="event-actions">
+                            <a href="#" class="register-btn">Register</a>
+                            <div class="save-event">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                        <span class="event-type type-social">Social</span>
+                        <div class="event-date">Oct 12, 2023</div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Alumni Homecoming Weekend</h3>
+                        <div class="event-meta">
+                            <div>
+                                <i class="far fa-clock"></i>
+                                <span>All Day</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>University Campus</span>
+                            </div>
+                        </div>
+                        <p class="event-description">Return to campus for a weekend of reconnecting with classmates, faculty, and the school community.</p>
+                        <div class="event-actions">
+                            <a href="#" class="register-btn">Register</a>
+                            <div class="save-event">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                        <span class="event-type type-conference">Conference</span>
+                        <div class="event-date">Nov 8, 2023</div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Sustainable Business Summit</h3>
+                        <div class="event-meta">
+                            <div>
+                                <i class="far fa-clock"></i>
+                                <span>9:00 AM - 5:00 PM</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Chicago, IL</span>
+                            </div>
+                        </div>
+                        <p class="event-description">Explore the intersection of business and sustainability with industry leaders and experts.</p>
+                        <div class="event-actions">
+                            <a href="#" class="register-btn">Register</a>
+                            <div class="save-event">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                        <span class="event-type type-workshop">Workshop</span>
+                        <div class="event-date">Nov 15, 2023</div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Leadership Development Intensive</h3>
+                        <div class="event-meta">
+                            <div>
+                                <i class="far fa-clock"></i>
+                                <span>10:00 AM - 4:00 PM</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Boston, MA</span>
+                            </div>
+                        </div>
+                        <p class="event-description">A full-day workshop focused on developing leadership skills essential for today's business environment.</p>
+                        <div class="event-actions">
+                            <a href="#" class="register-btn">Register</a>
+                            <div class="save-event">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                        <span class="event-type type-networking">Networking</span>
+                        <div class="event-date">Dec 7, 2023</div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">Holiday Alumni Mixer</h3>
+                        <div class="event-meta">
+                            <div>
+                                <i class="far fa-clock"></i>
+                                <span>7:00 PM - 10:00 PM</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>New York, NY</span>
+                            </div>
+                        </div>
+                        <p class="event-description">Celebrate the holiday season with fellow alumni in this relaxed networking event.</p>
+                        <div class="event-actions">
+                            <a href="#" class="register-btn">Register</a>
+                            <div class="save-event">
+                                <i class="far fa-bookmark"></i>
+                                <span>Save</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="create-event-section">
+                <h2 class="create-event-title">Want to Host Your Own Alumni Event?</h2>
+                <p class="create-event-text">Share your expertise, connect with peers, or simply reunite with classmates by hosting your own event. We provide the platform and support to help make your event a success.</p>
+                <a href="#" class="create-event-btn">Propose an Event</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">BizAlum Portal</a>
+                    <p>Connecting alumni, creating opportunities</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h3>Navigate</h3>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="directory.html">Directory</a></li>
+                            <li><a href="events.html">Events</a></li>
+                            <li><a href="opportunities.html">Opportunities</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="#">Career Services</a></li>
+                            <li><a href="#">Mentorship</a></li>
+                            <li><a href="#">Continuing Education</a></li>
+                            <li><a href="#">Alumni Benefits</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>Connect</h3>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 BizAlum Portal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+        
+        // Save event functionality
+        const saveButtons = document.querySelectorAll('.save-event');
+        
+        saveButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                icon.classList.toggle('far');
+                icon.classList.toggle('fas');
+                
+                const text = this.querySelector('span');
+                if (icon.classList.contains('fas')) {
+                    text.textContent = 'Saved';
+                } else {
+                    text.textContent = 'Save';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

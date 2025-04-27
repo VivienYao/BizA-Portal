@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opportunities | BizAlum Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .opportunities-container {
+            padding: 2rem 0;
+        }
+        
+        .opportunities-filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-options select,
+        .search-jobs input {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .search-jobs {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .search-jobs input {
+            width: 100%;
+            padding-left: 2.5rem;
+        }
+        
+        .search-jobs i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        
+        .job-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .job-company {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #f8f9fa;
+            padding: 0.5rem;
+        }
+        
+        .job-type {
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: white;
+        }
+        
+        .job-type-fulltime {
+            background: #4d94ff;
+        }
+        
+        .job-type-parttime {
+            background: #ff7e5f;
+        }
+        
+        .job-type-contract {
+            background: #9b59b6;
+        }
+        
+        .job-type-internship {
+            background: #2ecc71;
+        }
+        
+        .job-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .job-company-name {
+            color: #666;
+        }
+        
+        .job-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .job-meta div {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .job-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .job-tag {
+            background: #f0f0f0;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+        
+        .job-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .apply-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .apply-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .save-job {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .save-job:hover {
+            color: var(--primary-color);
+        }
+        
+        .post-job-section {
+            margin-top: 4rem;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .post-job-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        
+        .post-job-text {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .post-job-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .post-job-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .featured-opportunities {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        
+        .featured-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .featured-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .featured-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .featured-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .featured-company {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .featured-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #f8f9fa;
+            padding: 0.5rem;
+        }
+        
+        .featured-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .featured-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        .featured-meta div {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .featured-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .featured-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .featured-tag {
+            background: #f0f0f0;
+            padding: 0.35rem 0.75rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #555;
+        }
+        
+        .featured-description {
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .featured-footer {
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .learn-more {
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .learn-more:hover {
+            text-decoration: underline;
+        }
+        
+        .featured-date {
+            color: #777;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .featured-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .post-job-section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">BizAlum Portal</a>
+                </div>
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="directory.html">Directory</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="opportunities.html" class="active">Opportunities</a></li>
+                    </ul>
+                </nav>
+                <div class="header-right">
+                    <a href="profile.html" class="profile-link">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Profile" class="profile-img">
+                        <span>My Profile</span>
+                    </a>
+                    <button class="mobile-menu-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Career Opportunities</h1>
+                <p>Exclusive job listings, networking opportunities, and resources for our alumni community</p>
+            </div>
+        </section>
+
+        <section class="opportunities-container container">
+            <div class="featured-opportunities">
+                <h2 class="section-title">Featured Opportunities</h2>
+                <div class="featured-list">
+                    <div class="featured-card">
+                        <div class="featured-header">
+                            <div class="featured-company">
+                                <img src="https://logo.clearbit.com/google.com" alt="Google" class="featured-logo">
+                                <div>
+                                    <h3 class="featured-title">Google Alumni Network</h3>
+                                    <p>Exclusive Alumni Program</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="featured-content">
+                            <div class="featured-tags">
+                                <span class="featured-tag">Networking</span>
+                                <span class="featured-tag">Mentorship</span>
+                                <span class="featured-tag">Career Growth</span>
+                            </div>
+                            <p class="featured-description">Join Google's exclusive alumni network program designed specifically for business school graduates. Get access to industry insights, mentorship opportunities, and special events.</p>
+                        </div>
+                        <div class="featured-footer">
+                            <a href="#" class="learn-more">Learn More</a>
+                            <span class="featured-date">Featured until Dec 31, 2023</span>
+                        </div>
+                    </div>
+
+                    <div class="featured-card">
+                        <div class="featured-header">
+                            <div class="featured-company">
+                                <img src="https://logo.clearbit.com/mckinsey.com" alt="McKinsey" class="featured-logo">
+                                <div>
+                                    <h3 class="featured-title">McKinsey Leadership Program</h3>
+                                    <p>Executive Development</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="featured-content">
+                            <div class="featured-tags">
+                                <span class="featured-tag">Leadership</span>
+                                <span class="featured-tag">Training</span>
+                                <span class="featured-tag">Professional Development</span>
+                            </div>
+                            <p class="featured-description">A comprehensive 6-month leadership development program for alumni looking to enhance their strategic thinking and management skills in today's evolving business landscape.</p>
+                        </div>
+                        <div class="featured-footer">
+                            <a href="#" class="learn-more">Learn More</a>
+                            <span class="featured-date">Applications close Nov 15, 2023</span>
+                        </div>
+                    </div>
+
+                    <div class="featured-card">
+                        <div class="featured-header">
+                            <div class="featured-company">
+                                <img src="https://logo.clearbit.com/jpmorgan.com" alt="JP Morgan" class="featured-logo">
+                                <div>
+                                    <h3 class="featured-title">Alumni Venture Capital Fund</h3>
+                                    <p>Investment Opportunity</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="featured-content">
+                            <div class="featured-tags">
+                                <span class="featured-tag">Investing</span>
+                                <span class="featured-tag">Entrepreneurship</span>
+                                <span class="featured-tag">Startup</span>
+                            </div>
+                            <p class="featured-description">Join our exclusive alumni-managed venture capital fund focusing on early-stage startups. Both investors and entrepreneurs from our alumni network are welcome to participate.</p>
+                        </div>
+                        <div class="featured-footer">
+                            <a href="#" class="learn-more">Learn More</a>
+                            <span class="featured-date">Information session: Oct 5, 2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opportunities-filter">
+                <div class="filter-options">
+                    <select name="job-type">
+                        <option value="">All Job Types</option>
+                        <option value="fulltime">Full-time</option>
+                        <option value="parttime">Part-time</option>
+                        <option value="contract">Contract</option>
+                        <option value="internship">Internship</option>
+                    </select>
+                    <select name="job-location">
+                        <option value="">All Locations</option>
+                        <option value="remote">Remote</option>
+                        <option value="usa">USA</option>
+                        <option value="europe">Europe</option>
+                        <option value="asia">Asia</option>
+                    </select>
+                    <select name="job-industry">
+                        <option value="">All Industries</option>
+                        <option value="tech">Technology</option>
+                        <option value="finance">Finance</option>
+                        <option value="consulting">Consulting</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="education">Education</option>
+                    </select>
+                </div>
+                <div class="search-jobs">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search jobs...">
+                </div>
+            </div>
+
+            <div class="job-listings">
+                <div class="job-card">
+                    <div class="job-header">
+                        <div class="job-company">
+                            <img src="https://logo.clearbit.com/microsoft.com" alt="Microsoft" class="company-logo">
+                            <div>
+                                <h3 class="job-title">Senior Product Manager</h3>
+                                <p class="job-company-name">Microsoft</p>
+                            </div>
+                        </div>
+                        <span class="job-type job-type-fulltime">Full-time</span>
+                    </div>
+                    <div class="job-meta">
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Redmond, WA (Hybrid)</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>$140,000 - $180,000</span>
+                        </div>
+                        <div>
+                            <i class="far fa-clock"></i>
+                            <span>Posted 2 days ago</span>
+                        </div>
+                    </div>
+                    <p class="job-description">Microsoft is seeking an experienced Product Manager to lead strategic initiatives for our cloud services division. You'll work with cross-functional teams to define product vision, strategy, and roadmap.</p>
+                    <div class="job-tags">
+                        <span class="job-tag">Product Strategy</span>
+                        <span class="job-tag">Azure</span>
+                        <span class="job-tag">Cloud Computing</span>
+                        <span class="job-tag">Agile</span>
+                        <span class="job-tag">Data Analytics</span>
+                    </div>
+                    <div class="job-actions">
+                        <a href="#" class="apply-btn">Apply Now</a>
+                        <div class="save-job">
+                            <i class="far fa-bookmark"></i>
+                            <span>Save Job</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div class="job-company">
+                            <img src="https://logo.clearbit.com/goldmansachs.com" alt="Goldman Sachs" class="company-logo">
+                            <div>
+                                <h3 class="job-title">Investment Banking Associate</h3>
+                                <p class="job-company-name">Goldman Sachs</p>
+                            </div>
+                        </div>
+                        <span class="job-type job-type-fulltime">Full-time</span>
+                    </div>
+                    <div class="job-meta">
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>New York, NY</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>$150,000 - $200,000 + Bonus</span>
+                        </div>
+                        <div>
+                            <i class="far fa-clock"></i>
+                            <span>Posted 1 week ago</span>
+                        </div>
+                    </div>
+                    <p class="job-description">Join our Investment Banking Division as an Associate focusing on M&A transactions and capital raising activities. Ideal candidates will have 2-4 years of experience in investment banking or related fields.</p>
+                    <div class="job-tags">
+                        <span class="job-tag">Investment Banking</span>
+                        <span class="job-tag">M&A</span>
+                        <span class="job-tag">Financial Modeling</span>
+                        <span class="job-tag">Due Diligence</span>
+                        <span class="job-tag">Valuation</span>
+                    </div>
+                    <div class="job-actions">
+                        <a href="#" class="apply-btn">Apply Now</a>
+                        <div class="save-job">
+                            <i class="far fa-bookmark"></i>
+                            <span>Save Job</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div class="job-company">
+                            <img src="https://logo.clearbit.com/bcg.com" alt="BCG" class="company-logo">
+                            <div>
+                                <h3 class="job-title">Senior Consultant</h3>
+                                <p class="job-company-name">Boston Consulting Group</p>
+                            </div>
+                        </div>
+                        <span class="job-type job-type-fulltime">Full-time</span>
+                    </div>
+                    <div class="job-meta">
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Multiple Locations</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Competitive</span>
+                        </div>
+                        <div>
+                            <i class="far fa-clock"></i>
+                            <span>Posted 5 days ago</span>
+                        </div>
+                    </div>
+                    <p class="job-description">BCG is looking for Senior Consultants to join our growing team. In this role, you'll work directly with clients to solve their most complex business challenges and drive transformational change.</p>
+                    <div class="job-tags">
+                        <span class="job-tag">Strategy Consulting</span>
+                        <span class="job-tag">Business Transformation</span>
+                        <span class="job-tag">Client Management</span>
+                        <span class="job-tag">Project Leadership</span>
+                    </div>
+                    <div class="job-actions">
+                        <a href="#" class="apply-btn">Apply Now</a>
+                        <div class="save-job">
+                            <i class="far fa-bookmark"></i>
+                            <span>Save Job</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div class="job-company">
+                            <img src="https://logo.clearbit.com/amazon.com" alt="Amazon" class="company-logo">
+                            <div>
+                                <h3 class="job-title">Senior Finance Manager</h3>
+                                <p class="job-company-name">Amazon</p>
+                            </div>
+                        </div>
+                        <span class="job-type job-type-fulltime">Full-time</span>
+                    </div>
+                    <div class="job-meta">
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Seattle, WA</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>$130,000 - $165,000</span>
+                        </div>
+                        <div>
+                            <i class="far fa-clock"></i>
+                            <span>Posted 3 days ago</span>
+                        </div>
+                    </div>
+                    <p class="job-description">Amazon is seeking a Senior Finance Manager to join our AWS Finance team. You'll provide financial guidance, develop long-term strategies, and help drive business decisions through financial analysis.</p>
+                    <div class="job-tags">
+                        <span class="job-tag">Financial Planning</span>
+                        <span class="job-tag">FP&A</span>
+                        <span class="job-tag">AWS</span>
+                        <span class="job-tag">Budget Management</span>
+                        <span class="job-tag">Business Intelligence</span>
+                    </div>
+                    <div class="job-actions">
+                        <a href="#" class="apply-btn">Apply Now</a>
+                        <div class="save-job">
+                            <i class="far fa-bookmark"></i>
+                            <span>Save Job</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div class="job-company">
+                            <img src="https://logo.clearbit.com/salesforce.com" alt="Salesforce" class="company-logo">
+                            <div>
+                                <h3 class="job-title">Marketing Director</h3>
+                                <p class="job-company-name">Salesforce</p>
+                            </div>
+                        </div>
+                        <span class="job-type job-type-fulltime">Full-time</span>
+                    </div>
+                    <div class="job-meta">
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>San Francisco, CA</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>$160,000 - $190,000</span>
+                        </div>
+                        <div>
+                            <i class="far fa-clock"></i>
+                            <span>Posted 1 day ago</span>
+                        </div>
+                    </div>
+                    <p class="job-description">Lead our enterprise marketing strategy for the financial services vertical. You'll develop and execute marketing campaigns, manage a team, and collaborate with sales to drive revenue growth.</p>
+                    <div class="job-tags">
+                        <span class="job-tag">B2B Marketing</span>
+                        <span class="job-tag">Digital Marketing</span>
+                        <span class="job-tag">Team Leadership</span>
+                        <span class="job-tag">Financial Services</span>
+                        <span class="job-tag">Marketing Strategy</span>
+                    </div>
+                    <div class="job-actions">
+                        <a href="#" class="apply-btn">Apply Now</a>
+                        <div class="save-job">
+                            <i class="far fa-bookmark"></i>
+                            <span>Save Job</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card">
+                    <div class="job-header">
+                        <div class="job-company">
+                            <img src="https://logo.clearbit.com/stripe.com" alt="Stripe" class="company-logo">
+                            <div>
+                                <h3 class="job-title">Business Development Manager</h3>
+                                <p class="job-company-name">Stripe</p>
+                            </div>
+                        </div>
+                        <span class="job-type job-type-fulltime">Full-time</span>
+                    </div>
+                    <div class="job-meta">
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Remote (US)</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>$120,000 - $150,000</span>
+                        </div>
+                        <div>
+                            <i class="far fa-clock"></i>
+                            <span>Posted 4 days ago</span>
+                        </div>
+                    </div>
+                    <p class="job-description">Join Stripe's partnerships team to identify, build, and manage strategic partnerships. You'll develop partnership strategies and execute deals that accelerate Stripe's growth in enterprise markets.</p>
+                    <div class="job-tags">
+                        <span class="job-tag">Business Development</span>
+                        <span class="job-tag">Partnerships</span>
+                        <span class="job-tag">FinTech</span>
+                        <span class="job-tag">Enterprise Sales</span>
+                        <span class="job-tag">Negotiation</span>
+                    </div>
+                    <div class="job-actions">
+                        <a href="#" class="apply-btn">Apply Now</a>
+                        <div class="save-job">
+                            <i class="far fa-bookmark"></i>
+                            <span>Save Job</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-job-section">
+                <h2 class="post-job-title">Are You Hiring?</h2>
+                <p class="post-job-text">As an alum, you can post job opportunities for fellow alumni and current students. Help build our community by sharing positions at your organization.</p>
+                <a href="#" class="post-job-btn">Post a Job</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">BizAlum Portal</a>
+                    <p>Connecting alumni, creating opportunities</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h3>Navigate</h3>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="directory.html">Directory</a></li>
+                            <li><a href="events.html">Events</a></li>
+                            <li><a href="opportunities.html">Opportunities</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="#">Career Services</a></li>
+                            <li><a href="#">Mentorship</a></li>
+                            <li><a href="#">Continuing Education</a></li>
+                            <li><a href="#">Alumni Benefits</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>Connect</h3>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 BizAlum Portal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+        
+        // Save job functionality
+        const saveButtons = document.querySelectorAll('.save-job');
+        
+        saveButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                icon.classList.toggle('far');
+                icon.classList.toggle('fas');
+                
+                const text = this.querySelector('span');
+                if (icon.classList.contains('fas')) {
+                    text.textContent = 'Saved';
+                } else {
+                    text.textContent = 'Save Job';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

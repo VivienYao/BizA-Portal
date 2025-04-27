@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | BizAlum Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Profile Page Specific Styles */
+        .profile-container {
+            padding: 3rem 0;
+        }
+        
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        
+        /* Profile Sidebar */
+        .profile-sidebar {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            position: sticky;
+            top: 90px;
+        }
+        
+        .profile-image-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .edit-profile-img {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .edit-profile-img:hover {
+            background: var(--primary-dark);
+        }
+        
+        .profile-name {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-name h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+        
+        .profile-name p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .profile-name .alumni-badge {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        
+        .profile-contact {
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-contact h3, .profile-skills h3 {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+            color: #666;
+        }
+        
+        .contact-item i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .profile-skills {
+            margin-bottom: 1.5rem;
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .skill-tag {
+            background: #f0f0f0;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: #555;
+            transition: all 0.3s;
+        }
+        
+        .skill-tag:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .profile-actions {
+            margin-top: 2rem;
+        }
+        
+        .edit-profile-btn {
+            display: block;
+            text-align: center;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .edit-profile-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Profile Main Content */
+        .profile-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid #f0f0f0;
+            background: #f8f9fa;
+        }
+        
+        .profile-tab {
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .profile-tab.active {
+            color: var(--primary-color);
+        }
+        
+        .profile-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .profile-tab-content {
+            padding: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+            height: 1.2rem;
+            width: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .about-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .about-text {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .experience-section, .education-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .experience-item, .education-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .experience-item:last-child, .education-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .experience-header, .education-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+        
+        .company-info, .school-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .company-logo, .school-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #f8f9fa;
+            padding: 0.5rem;
+        }
+        
+        .company-details h4, .school-details h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+        
+        .company-details p, .school-details p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .experience-date, .education-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .experience-description, .education-description {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .achievements-list {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+            list-style-type: disc;
+        }
+        
+        .achievements-list li {
+            color: #555;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .connections-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .connection-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .connection-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .connection-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .connection-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+        
+        .connection-title {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+        }
+        
+        .connect-btn {
+            display: block;
+            text-align: center;
+            padding: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .connect-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-sidebar {
+                position: static;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .connections-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .profile-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+            }
+            
+            .profile-tabs::-webkit-scrollbar { /* Chrome, Safari, Edge */
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">BizAlum Portal</a>
+                </div>
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="directory.html">Directory</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="opportunities.html">Opportunities</a></li>
+                    </ul>
+                </nav>
+                <div class="header-right">
+                    <a href="profile.html" class="profile-link active">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Profile" class="profile-img">
+                        <span>My Profile</span>
+                    </a>
+                    <button class="mobile-menu-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>My Profile</h1>
+                <p>Manage your profile and explore your network connections</p>
+            </div>
+        </section>
+
+        <section class="profile-container container">
+            <div class="profile-grid">
+                <!-- Profile Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="profile-image-container">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Profile" class="profile-image">
+                        <div class="edit-profile-img">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div class="profile-name">
+                        <h2>Emma Thompson</h2>
+                        <p>Product Marketing Manager</p>
+                        <span class="alumni-badge">Class of 2018</span>
+                    </div>
+                    <div class="profile-contact">
+                        <h3>Contact Information</h3>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>emma.thompson@email.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>San Francisco, CA</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-linkedin"></i>
+                            <span>linkedin.com/in/emmathompson</span>
+                        </div>
+                    </div>
+                    <div class="profile-skills">
+                        <h3>Skills & Expertise</h3>
+                        <div class="skills-list">
+                            <span class="skill-tag">Product Marketing</span>
+                            <span class="skill-tag">Market Research</span>
+                            <span class="skill-tag">Digital Strategy</span>
+                            <span class="skill-tag">Brand Development</span>
+                            <span class="skill-tag">Content Strategy</span>
+                            <span class="skill-tag">SEO/SEM</span>
+                            <span class="skill-tag">Data Analytics</span>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <a href="#" class="edit-profile-btn">Edit Profile</a>
+                    </div>
+                </div>
+
+                <!-- Profile Main Content -->
+                <div class="profile-content">
+                    <div class="profile-tabs">
+                        <div class="profile-tab active" data-tab="about">About</div>
+                        <div class="profile-tab" data-tab="experience">Experience</div>
+                        <div class="profile-tab" data-tab="education">Education</div>
+                        <div class="profile-tab" data-tab="connections">Connections</div>
+                    </div>
+                    
+                    <!-- About Tab Content -->
+                    <div id="about" class="profile-tab-content active">
+                        <div class="about-section">
+                            <h3 class="section-title">About Me</h3>
+                            <p class="about-text">Passionate product marketing professional with over 5 years of experience in developing and executing marketing strategies for SaaS products. Expertise in go-to-market planning, competitive analysis, and customer segmentation. Proven track record of successful product launches and driving user adoption.</p>
+                            <p class="about-text">As a Business School alumna, I leverage my academic foundation and industry experience to create data-driven marketing campaigns that align with business objectives and deliver measurable results.</p>
+                        </div>
+                        
+                        <div class="experience-section">
+                            <h3 class="section-title">Current Role</h3>
+                            <div class="experience-item">
+                                <div class="experience-header">
+                                    <div class="company-info">
+                                        <img src="https://logo.clearbit.com/salesforce.com" alt="Salesforce" class="company-logo">
+                                        <div class="company-details">
+                                            <h4>Product Marketing Manager</h4>
+                                            <p>Salesforce</p>
+                                        </div>
+                                    </div>
+                                    <div class="experience-date">
+                                        Jan 2020 - Present
+                                    </div>
+                                </div>
+                                <div class="experience-description">
+                                    <p>Lead product marketing initiatives for Salesforce's Marketing Cloud products, developing positioning, messaging, and go-to-market strategies. Collaborate cross-functionally with product, sales, and customer success teams to ensure effective product launches and customer adoption.</p>
+                                    <ul class="achievements-list">
+                                        <li>Spearheaded the launch of Marketing Cloud Intelligence, resulting in a 30% increase in new customer acquisition.</li>
+                                        <li>Developed competitive analysis framework that improved win rates by 15% against key competitors.</li>
+                                        <li>Created customer success stories that were featured in major industry publications.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Tab Content -->
+                    <div id="experience" class="profile-tab-content">
+                        <h3 class="section-title">Work Experience</h3>
+                        
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <div class="company-info">
+                                    <img src="https://logo.clearbit.com/salesforce.com" alt="Salesforce" class="company-logo">
+                                    <div class="company-details">
+                                        <h4>Product Marketing Manager</h4>
+                                        <p>Salesforce</p>
+                                    </div>
+                                </div>
+                                <div class="experience-date">
+                                    Jan 2020 - Present
+                                </div>
+                            </div>
+                            <div class="experience-description">
+                                <p>Lead product marketing initiatives for Salesforce's Marketing Cloud products, developing positioning, messaging, and go-to-market strategies. Collaborate cross-functionally with product, sales, and customer success teams to ensure effective product launches and customer adoption.</p>
+                                <ul class="achievements-list">
+                                    <li>Spearheaded the launch of Marketing Cloud Intelligence, resulting in a 30% increase in new customer acquisition.</li>
+                                    <li>Developed competitive analysis framework that improved win rates by 15% against key competitors.</li>
+                                    <li>Created customer success stories that were featured in major industry publications.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <div class="company-info">
+                                    <img src="https://logo.clearbit.com/hubspot.com" alt="HubSpot" class="company-logo">
+                                    <div class="company-details">
+                                        <h4>Senior Marketing Specialist</h4>
+                                        <p>HubSpot</p>
+                                    </div>
+                                </div>
+                                <div class="experience-date">
+                                    Jun 2018 - Dec 2019
+                                </div>
+                            </div>
+                            <div class="experience-description">
+                                <p>Managed marketing campaigns for HubSpot's CRM tools, focusing on lead generation, content marketing, and customer education. Worked with the product team to gather customer insights and optimize product features.</p>
+                                <ul class="achievements-list">
+                                    <li>Designed marketing campaigns that generated 2,500+ qualified leads per quarter.</li>
+                                    <li>Created educational content that improved user onboarding completion rates by 25%.</li>
+                                    <li>Implemented A/B testing strategy that increased email conversion rates by 18%.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <div class="company-info">
+                                    <img src="https://logo.clearbit.com/adobe.com" alt="Adobe" class="company-logo">
+                                    <div class="company-details">
+                                        <h4>Marketing Associate</h4>
+                                        <p>Adobe</p>
+                                    </div>
+                                </div>
+                                <div class="experience-date">
+                                    Sep 2016 - May 2018
+                                </div>
+                            </div>
+                            <div class="experience-description">
+                                <p>Supported marketing efforts for Adobe Creative Cloud, assisting with campaign execution, content creation, and marketing analytics. Collaborated with the digital marketing team to optimize online customer journeys.</p>
+                                <ul class="achievements-list">
+                                    <li>Contributed to marketing campaigns that exceeded quarterly conversion goals by 12%.</li>
+                                    <li>Assisted in developing student-focused marketing strategy that increased education segment adoption by 20%.</li>
+                                    <li>Helped create dashboard for tracking marketing KPIs, improving reporting efficiency.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Education Tab Content -->
+                    <div id="education" class="profile-tab-content">
+                        <h3 class="section-title">Education</h3>
+                        
+                        <div class="education-item">
+                            <div class="education-header">
+                                <div class="school-info">
+                                    <img src="https://logo.clearbit.com/harvard.edu" alt="Harvard Business School" class="school-logo">
+                                    <div class="school-details">
+                                        <h4>Harvard Business School</h4>
+                                        <p>Master of Business Administration (MBA)</p>
+                                    </div>
+                                </div>
+                                <div class="education-date">
+                                    2016 - 2018
+                                </div>
+                            </div>
+                            <div class="education-description">
+                                <p>Graduated with honors, specializing in Marketing and Digital Strategy. Active member of the Marketing Club and Women in Business Association.</p>
+                                <ul class="achievements-list">
+                                    <li>Recipient of the Leadership Excellence Award</li>
+                                    <li>Completed capstone project on "Digital Transformation in Traditional Industries"</li>
+                                    <li>Participated in international business case competition, placing 2nd among 20 teams</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="education-item">
+                            <div class="education-header">
+                                <div class="school-info">
+                                    <img src="https://logo.clearbit.com/berkeley.edu" alt="UC Berkeley" class="school-logo">
+                                    <div class="school-details">
+                                        <h4>University of California, Berkeley</h4>
+                                        <p>Bachelor of Science in Business Administration</p>
+                                    </div>
+                                </div>
+                                <div class="education-date">
+                                    2012 - 2016
+                                </div>
+                            </div>
+                            <div class="education-description">
+                                <p>Graduated summa cum laude with a focus on Marketing and International Business. Minor in Data Science.</p>
+                                <ul class="achievements-list">
+                                    <li>Dean's List all semesters</li>
+                                    <li>Marketing Student of the Year (2016)</li>
+                                    <li>Completed semester abroad at London School of Economics</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Connections Tab Content -->
+                    <div id="connections" class="profile-tab-content">
+                        <h3 class="section-title">Your Network (48)</h3>
+                        
+                        <div class="connections-grid">
+                            <div class="connection-card">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen" class="connection-image">
+                                <h4 class="connection-name">Michael Chen</h4>
+                                <p class="connection-title">Product Manager at Google</p>
+                                <a href="#" class="connect-btn">Message</a>
+                            </div>
+                            
+                            <div class="connection-card">
+                                <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="Sarah Johnson" class="connection-image">
+                                <h4 class="connection-name">Sarah Johnson</h4>
+                                <p class="connection-title">Investment Analyst at Goldman Sachs</p>
+                                <a href="#" class="connect-btn">Message</a>
+                            </div>
+                            
+                            <div class="connection-card">
+                                <img src="https://randomuser.me/api/portraits/men/15.jpg" alt="David Williams" class="connection-image">
+                                <h4 class="connection-name">David Williams</h4>
+                                <p class="connection-title">Founder & CEO, FinTech Startup</p>
+                                <a href="#" class="connect-btn">Message</a>
+                            </div>
+                            
+                            <div class="connection-card">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Patel" class="connection-image">
+                                <h4 class="connection-name">Priya Patel</h4>
+                                <p class="connection-title">Management Consultant</p>
+                                <a href="#" class="connect-btn">Message</a>
+                            </div>
+                            
+                            <div class="connection-card">
+                                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Carlos Rodriguez" class="connection-image">
+                                <h4 class="connection-name">Carlos Rodriguez</h4>
+                                <p class="connection-title">Financial Analyst at JP Morgan</p>
+                                <a href="#" class="connect-btn">Message</a>
+                            </div>
+                            
+                            <div class="connection-card">
+                                <img src="https://randomuser.me/api/portraits/women/23.jpg" alt="Jennifer Lee" class="connection-image">
+                                <h4 class="connection-name">Jennifer Lee</h4>
+                                <p class="connection-title">Marketing Director at P&G</p>
+                                <a href="#" class="connect-btn">Message</a>
+                            </div>
+                        </div>
+                        
+                        <div class="view-all" style="margin-top: 2rem;">
+                            <a href="#" class="view-all-btn">View All Connections</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">BizAlum Portal</a>
+                    <p>Connecting alumni, creating opportunities</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h3>Navigate</h3>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="directory.html">Directory</a></li>
+                            <li><a href="events.html">Events</a></li>
+                            <li><a href="opportunities.html">Opportunities</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="#">Career Services</a></li>
+                            <li><a href="#">Mentorship</a></li>
+                            <li><a href="#">Continuing Education</a></li>
+                            <li><a href="#">Alumni Benefits</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h3>Connect</h3>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 BizAlum Portal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+        
+        // Profile tabs functionality
+        const tabButtons = document.querySelectorAll('.profile-tab');
+        const tabContents = document.querySelectorAll('.profile-tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all tabs
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to current tab
+                this.classList.add('active');
+                
+                // Show the corresponding content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 
